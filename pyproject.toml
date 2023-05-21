@@ -30,7 +30,8 @@ packages = [
 ]
 
 [tool.poetry.dependencies]
-python = ">=3.7.1, <4.0"
+python = ">=3.8, <3.11"
+latexify-py = "^0.2.0"
 
 [tool.poetry.dev-dependencies]
 autoflake = "*"
@@ -55,6 +56,7 @@ pytest-cov = "*"
 python-kacl = "*"
 pyupgrade = "*"
 tryceratops = "*"
+urllib3 = "^1.2.3"
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]
@@ -65,7 +67,7 @@ profile = "black"
 src_paths = ["src", "tests"]
 
 [tool.black]
-target-version = ["py37", "py38", "py39"]
+target-version = ["py38", "py39"]
 include = '\.pyi?$'
 
 [tool.pytest.ini_options]
