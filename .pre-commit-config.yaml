@@ -10,7 +10,6 @@ repos:
       - id: check-json
       - id: check-yaml
       - id: debug-statements
-      - id: end-of-file-fixer
       - id: trailing-whitespace
       - id: mixed-line-ending
 -   repo: local

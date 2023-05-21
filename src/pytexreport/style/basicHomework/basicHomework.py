@@ -5,6 +5,7 @@ from pylatex.base_classes import Arguments, Options
 
 from pytexreport import pytexreport
 
+
 class basicHomework(pytexreport.PyTexReport):
     def __init__(self, title: str, subtitle: str, author: str, author_id: str):
         self.title = title
