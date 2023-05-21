@@ -4,10 +4,10 @@ from typing import Union
 from pylatex import Command, Document, NoEscape
 from pylatex.base_classes import Arguments, Options
 
-from PyTexReport import PyTexReport
+from pytexreport import pytexreport
 
 
-class ieeeConference(PyTexReport):
+class ieeeConference(pytexreport.PyTexReport):
     def __init__(
         self,
         title: str,

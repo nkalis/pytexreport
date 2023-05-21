@@ -32,6 +32,9 @@ packages = [
 [tool.poetry.dependencies]
 python = ">=3.8, <3.11"
 latexify-py = "^0.2.0"
+matplotlib = "^3.7.1"
+loguru = "^0.7.0"
+pylatex = "^1.4.1"
 
 [tool.poetry.dev-dependencies]
 autoflake = "*"

@@ -3,10 +3,10 @@ from datetime import date
 from pylatex import Command, Document, Figure, MiniPage, NoEscape
 from pylatex.base_classes import Arguments, Options
 
-from PyTexReport import PyTexReport
+from pytexreport import pytexreport
 
 
-class basicReport(PyTexReport):
+class basicReport(pytexreport.PyTexReport):
     def __init__(
         self,
         title: str,

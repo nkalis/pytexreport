@@ -3,10 +3,9 @@ import os
 from pylatex import Command, Document, NoEscape
 from pylatex.base_classes import Arguments, Options
 
-from PyTexReport import PyTexReport
+from pytexreport import pytexreport
 
-
-class basicHomework(PyTexReport):
+class basicHomework(pytexreport.PyTexReport):
     def __init__(self, title: str, subtitle: str, author: str, author_id: str):
         self.title = title
         self.subtitle = subtitle
