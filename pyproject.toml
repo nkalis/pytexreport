@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "pytexreport"
-version = "0.0.1"
+version = "0.0.2"
 description = "A short description of the project"
 authors = [
     "nkalis <n.kalis98@gmail.com>",
