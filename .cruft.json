@@ -1,0 +1,18 @@
+{
+  "template": "https://github.com/woltapp/wolt-python-package-cookiecutter",
+  "commit": "4eecc9c4d27e3c9321438bc1fdaf717bec5eadf6",
+  "checkout": null,
+  "context": {
+    "cookiecutter": {
+      "author_name": "nkalis",
+      "author_email": "n.kalis98@gmail.com",
+      "github_username": "nkalis",
+      "project_name": "pytexreport",
+      "project_slug": "pytexreport",
+      "package_name": "pytexreport",
+      "project_short_description": "A short description of the project",
+      "_template": "https://github.com/woltapp/wolt-python-package-cookiecutter"
+    }
+  },
+  "directory": null
+}
