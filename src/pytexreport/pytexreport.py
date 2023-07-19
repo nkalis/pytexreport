@@ -24,8 +24,8 @@ from pylatex import (
     Label,
     LineBreak,
     Matrix,
-    NewPage,
     NewLine,
+    NewPage,
     NoEscape,
     Section,
     Subsection,
@@ -53,7 +53,9 @@ class PyTexReport:
             Command(
                 "usepackage",
                 arguments=Arguments("xcolor"),
-                options=Options("usenames", "svgnames", "table", "xcdraw", "dvipsnames"),
+                options=Options(
+                    "usenames", "svgnames", "table", "xcdraw", "dvipsnames"
+                ),
             )
         )
         # Captioning Equations
@@ -164,8 +166,6 @@ class PyTexReport:
 
         self.content.append(NoEscape(f"{text} "))
 
-
-
     def addList(self, lists, type=1):
         if type < 3:
             if type == 1:
@@ -212,7 +212,8 @@ class PyTexReport:
 
         self.content.append(table)
 
-    def addFigure(self, file=None, caption=None, label=None, width=NoEscape(r'0.8\textwidth')
+    def addFigure(
+        self, file=None, caption=None, label=None, width=NoEscape(r"0.8\textwidth")
     ):
         fig = Figure(position="H")
         fig.add_image(file, width=width)
@@ -223,7 +224,13 @@ class PyTexReport:
         self.content.append(fig)
 
     def addMatplot(
-        self, plt, caption=None, label=None, dpi=300, extension="pdf", width=NoEscape(r'0.8\textwidth')
+        self,
+        plt,
+        caption=None,
+        label=None,
+        dpi=300,
+        extension="pdf",
+        width=NoEscape(r"0.8\textwidth"),
     ):
         fig = Figure(position="H")
         fig.add_plot(width=NoEscape(width), dpi=dpi, extension=extension)

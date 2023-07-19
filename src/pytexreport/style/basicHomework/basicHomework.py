@@ -32,7 +32,9 @@ class basicHomework(pytexreport.PyTexReport):
 
         self.doc.packages.append(Command("usepackage", arguments=Arguments("lipsum")))
         self.doc.preamble.append(NoEscape(r"\newcommand*{\name}{" + self.author + r"}"))
-        self.doc.preamble.append(NoEscape(r"\newcommand*{\id}{" + self.author_id + r"}"))
+        self.doc.preamble.append(
+            NoEscape(r"\newcommand*{\id}{" + self.author_id + r"}")
+        )
         self.doc.preamble.append(NoEscape(r"\newcommand*{\course}{" + self.title + "}"))
         self.doc.preamble.append(
             NoEscape(r"\newcommand*{\assignment}{" + self.subtitle + "}")
