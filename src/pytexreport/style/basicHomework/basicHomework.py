@@ -21,7 +21,7 @@ class basicHomework(pytexreport.PyTexReport):
             rf"{os.path.dirname( __file__ )}\basicHomework.cls"
         )
         self.classFileName = "basicHomework"
-        
+
         super().__init__()
 
         # Set up the custom document title page parameters

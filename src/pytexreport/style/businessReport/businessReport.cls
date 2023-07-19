@@ -76,7 +76,7 @@
 
 % Restyle the \sidenote command from the sidenotes package to reduce the font size
 \makeatletter
-\RenewDocumentCommand\sidenotetext{o o +m}{%      
+\RenewDocumentCommand\sidenotetext{o o +m}{%
 	\IfNoValueOrEmptyTF{#1}{%
 		\@sidenotes@placemarginal{#2}{\textsuperscript{\thesidenote}\footnotesize#3}%
 		\refstepcounter{sidenote}%
@@ -233,7 +233,7 @@
 	{} % Formatting of numberless sections of this type
 	{\titlerule*[6pt]{.}\contentspage} % Formatting of the filler to the right of the heading and the page number
 	[] % After code
-	
+
 %------------------------------------------------
 
 \titlecontents{subsubsection} % Section type being modified
