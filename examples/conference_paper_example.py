@@ -12,7 +12,7 @@ containing data. It also creates a complex header with an image.
 import matplotlib.pyplot as plt
 import numpy as np
 
-from PyTexReport.style import ieeeConference
+from pytexreport.style.ieeeConference import ieeeConference
 
 report = ieeeConference(
     title="Conference Paper Title*",

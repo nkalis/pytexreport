@@ -12,28 +12,26 @@ containing data. It also creates a complex header with an image.
 import matplotlib.pyplot as plt
 import numpy as np
 
-from pytexreport.style.basicReport import basicReport
+from pytexreport.style.businessReport import businessReport
 
-report = basicReport(
+report = businessReport(
     title="PyTexReport - Test Report",
     subtitle="Output of the test documentation of PyTexReport",
-    department="PyTexReport",
-    organization="Test Organization",
-    authors=["nkalis"],
+    authors=["nkalis, n.kalis98@gmail.com"],
+    logo="logo.png",
 )
 
 report.createSection("Basic Text Examples")
 # report.addText('Text goes here.')
 
 report.createSubSection("No Line Breaks")
-report.addText("Text goes here.")
-report.addText("Text goes here.")
-report.addText("Text goes here.", new_paragraph=False)
+report.addText("The first line of the paragraph goes here.")
+report.addText("The second line of the paragraph goes here.")
+report.addText("The final line of the paragraph goes here.")
 
-report.createSubSection("Line Breaks")
+report.createSubSection("Paragraph Breaks")
 report.addText("Text goes here.")
-report.createNewLine()
-report.addText("More Text goes here")
+report.addText("More Text goes here", new_paragraph=True)
 
 report.createSubSection("Special text")
 report.createSubSubSection("Referencing")

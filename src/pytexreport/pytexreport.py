@@ -25,6 +25,7 @@ from pylatex import (
     LineBreak,
     Matrix,
     NewPage,
+    NewLine,
     NoEscape,
     Section,
     Subsection,
@@ -47,11 +48,12 @@ class PyTexReport:
 
     def __init__(self):
         # Adding Package to allow notes
+        self.doc.preamble.append(NoEscape(r"\usepackage{amsmath, xparse}"))
         self.doc.packages.append(
             Command(
                 "usepackage",
                 arguments=Arguments("xcolor"),
-                options=Options("table", "xcdraw", "dvipsnames"),
+                options=Options("usenames", "svgnames", "table", "xcdraw", "dvipsnames"),
             )
         )
         # Captioning Equations
@@ -64,12 +66,12 @@ class PyTexReport:
         self.doc.preamble.append(NoEscape(r"\newcommand*{\ORGeqfloat}{}"))
         self.doc.preamble.append(NoEscape(r"\let\ORGeqfloat\eqfloat"))
         self.doc.preamble.append(NoEscape(r"\def\eqfloat{%"))
-        self.doc.preamble.append(NoEscape(r"\let\ORIGINALcaption\caption"))
-        self.doc.preamble.append(NoEscape(r"\def\caption{%"))
-        self.doc.preamble.append(NoEscape(r"\addtocounter{equation}{-1}%"))
-        self.doc.preamble.append(NoEscape(r"\ORIGINALcaption"))
-        self.doc.preamble.append(NoEscape(r"}%"))
-        self.doc.preamble.append(NoEscape(r"\ORGeqfloat"))
+        self.doc.preamble.append(NoEscape(r"    \let\ORIGINALcaption\caption"))
+        self.doc.preamble.append(NoEscape(r"    \def\caption{%"))
+        self.doc.preamble.append(NoEscape(r"        \addtocounter{equation}{-1}%"))
+        self.doc.preamble.append(NoEscape(r"        \ORIGINALcaption"))
+        self.doc.preamble.append(NoEscape(r"    }%"))
+        self.doc.preamble.append(NoEscape(r"    \ORGeqfloat"))
         self.doc.preamble.append(NoEscape(r"}"))
 
         # Enum Items
@@ -111,18 +113,18 @@ class PyTexReport:
         self.content.append(NewPage())
 
     def createNewLine(self):
-        self.content.append("")
+        self.content.append(NewLine())
 
     def addLineBreak(self):
         self.content.append(LineBreak())
 
     def addVSpace(self, size="medium"):
         if size == "small":
-            self.content.append(NoEscape(r"\smallskip"))
+            self.content.append(NoEscape(r"\smallskip "))
         if size == "medium":
-            self.content.append(NoEscape(r"\medskip"))
+            self.content.append(NoEscape(r"\medskip "))
         if size == "large":
-            self.content.append(NoEscape(r"\largelskip"))
+            self.content.append(NoEscape(r"\largelskip "))
 
     def createSection(self, title, numbering=None):
         self.flush(0)
@@ -139,7 +141,13 @@ class PyTexReport:
         self.subsubsection = Subsubsection(title, numbering=numbering)
         self.presentSection.append(self.subsubsection)
 
-    def addText(self, text, color=None, new_paragraph=True):
+    def addText(self, text, color=None, new_paragraph=False, linebreak=False):
+        if new_paragraph:
+            self.content.append(NoEscape(r"\\ "))
+            self.content.append(NoEscape(r"\\ "))
+        elif linebreak:
+            self.createNewLine()
+
         if text[0] == "#":
             text = text[1:]
             if text[0] == "!":
@@ -154,10 +162,9 @@ class PyTexReport:
         if color is not None:
             text = NoEscape(r"\textcolor{" + color + "}{" + text + "}")
 
-        self.content.append(NoEscape(text))
+        self.content.append(NoEscape(f"{text} "))
 
-        if new_paragraph:
-            self.createNewLine()
+
 
     def addList(self, lists, type=1):
         if type < 3:
@@ -205,12 +212,10 @@ class PyTexReport:
 
         self.content.append(table)
 
-    def addFigure(self, file=None, caption=None, label=None, width=None):
+    def addFigure(self, file=None, caption=None, label=None, width=NoEscape(r'0.8\textwidth')
+    ):
         fig = Figure(position="H")
-        if width is not None:
-            fig.add_image(file, width=width)
-        else:
-            fig.add_image(file)
+        fig.add_image(file, width=width)
         if caption is not None:
             fig.add_caption(caption)
         if label is not None:
@@ -218,13 +223,10 @@ class PyTexReport:
         self.content.append(fig)
 
     def addMatplot(
-        self, plt, caption=None, label=None, dpi=300, extension="pdf", width=None
+        self, plt, caption=None, label=None, dpi=300, extension="pdf", width=NoEscape(r'0.8\textwidth')
     ):
         fig = Figure(position="H")
-        if width is not None:
-            fig.add_plot(width=NoEscape(width), dpi=dpi, extension=extension)
-        else:
-            fig.add_plot(dpi=dpi, extension=extension)
+        fig.add_plot(width=NoEscape(width), dpi=dpi, extension=extension)
         if caption is not None:
             fig.add_caption(caption)
         if label is not None:
@@ -269,6 +271,11 @@ class PyTexReport:
         filename = " ".join(filename.split())
         self.filename = filename.replace(" ", "_")
 
+        # End Appendix for businessReport
+        if hasattr(self, "businessReportAppendix"):
+            self.doc.append(NoEscape(r"\end{appendices}"))
+
+        # Copy classfile to output folder
         if hasattr(self, "classFile"):
             inputpath = os.path.join(
                 self.doc._select_filepath(filepath=None), self.classFile
@@ -276,7 +283,7 @@ class PyTexReport:
             outputpath = self.classFileName + ".cls"
             shutil.copyfile(inputpath, outputpath)
 
-        self.doc.generate_pdf(self.filename, clean_tex=False)
+        self.doc.generate_pdf(self.filename, clean_tex=True, silent=True)
 
     def _flush(self):
         if len(self.presentSection) > 2:

@@ -12,8 +12,9 @@ containing data. It also creates a complex header with an image.
 import matplotlib.pyplot as plt
 import numpy as np
 
-from PyTexReport.style import basicHomework
+from pytexreport.style.basicHomework import basicHomework
 
+# Custom styling for the basic homework style
 report = basicHomework(
     title="PyTexReport - Test Homework",
     subtitle="Output of the test documentation of PyTexReport",
@@ -21,18 +22,17 @@ report = basicHomework(
     author_id="00000000",
 )
 
+# Content available for the base class
 report.createSection("Basic Text Examples")
-# report.addText('Text goes here.')
 
 report.createSubSection("No Line Breaks")
 report.addText("Text goes here.")
 report.addText("Text goes here.")
-report.addText("Text goes here.", new_paragraph=False)
-
-report.createSubSection("Line Breaks")
 report.addText("Text goes here.")
-report.createNewLine()
-report.addText("More Text goes here")
+
+report.createSubSection("Paragraph Breaks")
+report.addText("Text goes here.")
+report.addText("More Text goes here", new_paragraph=True)
 
 report.createSubSection("Special text")
 report.createSubSubSection("Referencing")
@@ -41,10 +41,10 @@ report.createSubSubSection("Citing")
 report.addText("#TODO: Add citations")
 report.createSubSubSection("Special Text")
 report.addText("You can add comments so you dont forget to ad")
-report.addText("#TODO : Add TODOs")
-report.addText("#! : Add warnings")
-report.addText("#* : Add information")
-report.addText("#? : Add highlighted questions")
+report.addText("#TODO : Add TODOs", linebreak=True)
+report.addText("#! : Add warnings", linebreak=True)
+report.addText("#* : Add information", linebreak=True)
+report.addText("#? : Add highlighted questions", linebreak=True)
 
 report.createSection("Lists and Tables")
 # report.addText('Text goes here.')

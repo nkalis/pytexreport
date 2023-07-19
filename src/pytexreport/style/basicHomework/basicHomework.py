@@ -8,11 +8,7 @@ from pytexreport import pytexreport
 
 class basicHomework(pytexreport.PyTexReport):
     def __init__(self, title: str, subtitle: str, author: str, author_id: str):
-        self.title = title
-        self.subtitle = subtitle
-        self.author = author
-        self.author_id = author_id
-
+        # Create the custom docclass and initialize the pytexreport base class
         docclass = Command(
             "documentclass",
             options=Options(
@@ -20,23 +16,26 @@ class basicHomework(pytexreport.PyTexReport):
             ),
             arguments=Arguments("basicHomework"),
         )
-
-        doc = Document("documentclass", documentclass=docclass)
-
+        self.doc = Document("documentclass", documentclass=docclass)
         self.classFile = os.path.normpath(
             rf"{os.path.dirname( __file__ )}\basicHomework.cls"
         )
         self.classFileName = "basicHomework"
+        
+        super().__init__()
 
-        doc.packages.append(Command("usepackage", arguments=Arguments("lipsum")))
-        doc.preamble.append(NoEscape(r"\newcommand*{\name}{" + self.author + r"}"))
-        doc.preamble.append(NoEscape(r"\newcommand*{\id}{" + self.author_id + r"}"))
-        doc.preamble.append(NoEscape(r"\newcommand*{\course}{" + self.title + "}"))
-        doc.preamble.append(
+        # Set up the custom document title page parameters
+        self.title = title
+        self.subtitle = subtitle
+        self.author = author
+        self.author_id = author_id
+
+        self.doc.packages.append(Command("usepackage", arguments=Arguments("lipsum")))
+        self.doc.preamble.append(NoEscape(r"\newcommand*{\name}{" + self.author + r"}"))
+        self.doc.preamble.append(NoEscape(r"\newcommand*{\id}{" + self.author_id + r"}"))
+        self.doc.preamble.append(NoEscape(r"\newcommand*{\course}{" + self.title + "}"))
+        self.doc.preamble.append(
             NoEscape(r"\newcommand*{\assignment}{" + self.subtitle + "}")
         )
 
-        doc.append(NoEscape(r"\maketitle"))
-
-        self.doc = doc
-        super().__init__()
+        self.doc.append(NoEscape(r"\maketitle"))

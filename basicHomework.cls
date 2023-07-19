@@ -10,6 +10,7 @@
 
 \RequirePackage[margin=2cm]{geometry}
 
+\RequirePackage[table,xcdraw,dvipsnames]{xcolor}
 
 \RequirePackage{color}
 \definecolor{codegreen}{rgb}{0,0.6,0}
