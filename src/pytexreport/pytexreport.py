@@ -17,15 +17,12 @@ from collections import deque
 
 import latexify
 import matplotlib
-from loguru import logger
 from pandas import DataFrame
 from pylatex import (
-    Command,
     Figure,
     Label,
     LineBreak,
     Matrix,
-    NewLine,
     NewPage,
     NoEscape,
     Section,
@@ -33,7 +30,7 @@ from pylatex import (
     Subsubsection,
     Table,
 )
-from pylatex.base_classes import Arguments, Options
+from pylatex.base_classes import Options
 from pylatex.lists import Description, Enumerate, Itemize
 from pylatex.table import Tabular
 from pylatex.utils import escape_latex
