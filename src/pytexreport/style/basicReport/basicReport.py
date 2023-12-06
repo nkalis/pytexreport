@@ -1,8 +1,7 @@
 import os
 
-from loguru import logger
 from pylatex import Command, Document, NoEscape
-from pylatex.base_classes import Arguments, Options
+from pylatex.base_classes import Options
 
 from pytexreport import pytexreport
 
