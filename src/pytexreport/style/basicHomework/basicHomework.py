@@ -1,16 +1,18 @@
 import os
 
+from loguru import logger
 from pylatex import Command, Document, NoEscape
 from pylatex.base_classes import Arguments, Options
 
 from pytexreport import pytexreport
 
-from loguru import logger
 
 class basicHomework(pytexreport.PyTexReport):
-    def __init__(self, title: str, subtitle: str, author: str, author_id: str, logo: str):
+    def __init__(
+        self, title: str, subtitle: str, author: str, author_id: str, logo: str
+    ):
         # Create the custom docclass and initialize the pytexreport base class
-        doc = Document('basic')
+        doc = Document("basic")
         doc.documentclass = Command(
             "documentclass",
             options=Options("pytexreport"),
@@ -32,7 +34,11 @@ class basicHomework(pytexreport.PyTexReport):
         doc.preamble.append(NoEscape(r"\DeclareCaptionType{equ}[][]"))
 
         # Define geometry of pages
-        doc.preamble.append(NoEscape(r"\usepackage[top = 1in, bottom = 1in, left = 0.8in, right = 0.8in]{geometry}"))
+        doc.preamble.append(
+            NoEscape(
+                r"\usepackage[top = 1in, bottom = 1in, left = 0.8in, right = 0.8in]{geometry}"
+            )
+        )
 
         # Add packages unique to class
         doc.packages.append(Command("usepackage", arguments=Arguments("listings")))
@@ -66,14 +72,15 @@ class basicHomework(pytexreport.PyTexReport):
         doc.preamble.append(NoEscape(r"     \par Student ID: {" + self.author_id + "}"))
         doc.preamble.append(NoEscape(r" \end{flushleft}"))
         doc.preamble.append(NoEscape(r" \begin{center}"))
-        doc.preamble.append(NoEscape(r"     \par \textbf{\large {" + self.title + "} }"))
+        doc.preamble.append(
+            NoEscape(r"     \par \textbf{\large {" + self.title + "} }")
+        )
         doc.preamble.append(NoEscape(r"     \par {" + self.subtitle + "}"))
         doc.preamble.append(NoEscape(r" \end{center}"))
         doc.preamble.append(NoEscape(r" \rule{\linewidth}{0.1mm}"))
         doc.preamble.append(NoEscape(r" \bigskip"))
         doc.preamble.append(NoEscape(r" \bigskip"))
         doc.preamble.append(NoEscape(r"}"))
-
 
         # Set up footers/headers
         doc.preamble.append(NoEscape(r"\pagestyle{fancy}"))
@@ -85,10 +92,13 @@ class basicHomework(pytexreport.PyTexReport):
         # Add right after '\begin{document}'
         doc.append(NoEscape(r"\thispagestyle{empty}"))
         doc.append(NoEscape(r"\AddToShipoutPicture*"))
-        doc.append(NoEscape(r"  {\put(490,750){\includegraphics[height=3cm]{" + self.logo + "}}}"))
+        doc.append(
+            NoEscape(
+                r"  {\put(490,750){\includegraphics[height=3cm]{" + self.logo + "}}}"
+            )
+        )
         doc.append(NoEscape(r"\maketitle"))
 
         # Inherit all the base class functionality
         self.doc = doc
         super().__init__()
-

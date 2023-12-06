@@ -1,8 +1,8 @@
 import os
+from typing import Callable
 
 from pylatex import Command, Document, NoEscape
 from pylatex.base_classes import Options
-from typing import Callable
 
 from pytexreport import pytexreport
 
@@ -21,7 +21,7 @@ class businessReport(pytexreport.PyTexReport):
         self.logo = logo
 
         # Create the custom docclass and initialize the pytexreport base class
-        doc = Document('basic')
+        doc = Document("basic")
         doc.documentclass = Command(
             "documentclass",
             options=Options("pytexreport"),
@@ -36,31 +36,61 @@ class businessReport(pytexreport.PyTexReport):
         doc.preamble.append(NoEscape(r"\DeclareCaptionType{equ}[][]"))
 
         # Define geometry of pages
-        doc.preamble.append(NoEscape(r"\usepackage[top = 0.8in, bottom = 1.5in, left = 0.8in, right = 0.8in]{geometry}"))
+        doc.preamble.append(
+            NoEscape(
+                r"\usepackage[top = 0.8in, bottom = 1.5in, left = 0.8in, right = 0.8in]{geometry}"
+            )
+        )
 
         # define colors
-        doc.add_color('color1', 'HTML', '000060')
-        doc.add_color('color2', 'HTML', '333333')
+        doc.add_color("color1", "HTML", "000060")
+        doc.add_color("color2", "HTML", "333333")
 
         # Format the page style
         doc.preamble.append(NoEscape(r"\pagestyle{fancy}"))
         doc.preamble.append(NoEscape(r"\linespread{1.2}"))
 
         # format image/plot caption style
-        doc.preamble.append(NoEscape(r"\DeclareCaptionFormat{upper}{#1#2\uppercase{#3}\par}"))
-        doc.preamble.append(NoEscape(r"\captionsetup{labelfont={bf,color=color2},textfont={normalsize,color=color2},format = upper,figurename=FIGURE,tablename=TABLE}"))
+        doc.preamble.append(
+            NoEscape(r"\DeclareCaptionFormat{upper}{#1#2\uppercase{#3}\par}")
+        )
+        doc.preamble.append(
+            NoEscape(
+                r"\captionsetup{labelfont={bf,color=color2},textfont={normalsize,color=color2},format = upper,figurename=FIGURE,tablename=TABLE}"
+            )
+        )
 
         # fancy sections
-        doc.preamble.append(NoEscape(r"\titleformat{\section}{\color{color1}\Large\bfseries\uppercase}{\thesection}{1em}{}[\titlerule]"))
-        doc.preamble.append(NoEscape(r"\titleformat{\subsection}{\color{color1}\large\bfseries\uppercase}{\thesubsection}{1em}{}"))
-        doc.preamble.append(NoEscape(r"\titleformat{\subsubsection}{\color{color1}\bfseries\uppercase}{\thesubsubsection}{1em}{}"))
+        doc.preamble.append(
+            NoEscape(
+                r"\titleformat{\section}{\color{color1}\Large\bfseries\uppercase}{\thesection}{1em}{}[\titlerule]"
+            )
+        )
+        doc.preamble.append(
+            NoEscape(
+                r"\titleformat{\subsection}{\color{color1}\large\bfseries\uppercase}{\thesubsection}{1em}{}"
+            )
+        )
+        doc.preamble.append(
+            NoEscape(
+                r"\titleformat{\subsubsection}{\color{color1}\bfseries\uppercase}{\thesubsubsection}{1em}{}"
+            )
+        )
 
         # format the headers and footers
         doc.preamble.append(NoEscape(r"\fancyhf{}"))
         doc.preamble.append(NoEscape(r"\renewcommand{\headrulewidth}{0pt}"))
-        doc.preamble.append(NoEscape(r"\fancyhead[R]{\color{color2}{\large 10 December 2012}}"))
+        doc.preamble.append(
+            NoEscape(r"\fancyhead[R]{\color{color2}{\large 10 December 2012}}")
+        )
         doc.preamble.append(NoEscape(r"\setlength{\footskip}{60pt}"))
-        doc.preamble.append(NoEscape(r"\fancyfoot[L]{\raisebox{-1\baselineskip}{\includegraphics[scale=0.2]{"+ self.logo + r"}}}"))
+        doc.preamble.append(
+            NoEscape(
+                r"\fancyfoot[L]{\raisebox{-1\baselineskip}{\includegraphics[scale=0.2]{"
+                + self.logo
+                + r"}}}"
+            )
+        )
         doc.preamble.append(NoEscape(r"\fancyfoot[R]{\thepage}"))
         doc.preamble.append(NoEscape(r"\fancyfoot[C]{Template for business reports}"))
         doc.preamble.append(NoEscape(r"\setlength{\headheight}{15.2pt}"))
@@ -69,14 +99,22 @@ class businessReport(pytexreport.PyTexReport):
         # fancy boxes :)
         doc.preamble.append(NoEscape(r"\def\fullboxbegin{"))
         doc.preamble.append(NoEscape(r"    \bigskip"))
-        doc.preamble.append(NoEscape(r"    \begin{tcolorbox}[colback=color1,colframe=color1,coltext=white,arc=0mm,boxrule=0pt]"))
+        doc.preamble.append(
+            NoEscape(
+                r"    \begin{tcolorbox}[colback=color1,colframe=color1,coltext=white,arc=0mm,boxrule=0pt]"
+            )
+        )
         doc.preamble.append(NoEscape(r"}"))
         doc.preamble.append(NoEscape(r"\def\fullboxend{\end{tcolorbox}\medskip}"))
 
         doc.preamble.append(NoEscape(r"\def\leftboxbegin{"))
         doc.preamble.append(NoEscape(r"    \setlength{\intextsep}{1pt}"))
         doc.preamble.append(NoEscape(r"    \begin{wrapfigure}{l}{0.5\textwidth}"))
-        doc.preamble.append(NoEscape(r"    \begin{tcolorbox}[colback=color1,colframe=color1,coltext=white,arc=0mm,boxrule=0pt]"))
+        doc.preamble.append(
+            NoEscape(
+                r"    \begin{tcolorbox}[colback=color1,colframe=color1,coltext=white,arc=0mm,boxrule=0pt]"
+            )
+        )
         doc.preamble.append(NoEscape(r"}"))
         doc.preamble.append(NoEscape(r"\def\leftboxend{"))
         doc.preamble.append(NoEscape(r"\end{tcolorbox}"))
@@ -86,7 +124,11 @@ class businessReport(pytexreport.PyTexReport):
         doc.preamble.append(NoEscape(r"\def\rightboxbegin{"))
         doc.preamble.append(NoEscape(r"    \setlength{\intextsep}{1pt}"))
         doc.preamble.append(NoEscape(r"    \begin{wrapfigure}{r}{0.5\textwidth}"))
-        doc.preamble.append(NoEscape(r"    \begin{tcolorbox}[colback=color1,colframe=color1,coltext=white,arc=0mm,boxrule=0pt]"))
+        doc.preamble.append(
+            NoEscape(
+                r"    \begin{tcolorbox}[colback=color1,colframe=color1,coltext=white,arc=0mm,boxrule=0pt]"
+            )
+        )
         doc.preamble.append(NoEscape(r"}"))
         doc.preamble.append(NoEscape(r"\def\rightboxend{"))
         doc.preamble.append(NoEscape(r"\end{tcolorbox}"))
@@ -97,7 +139,11 @@ class businessReport(pytexreport.PyTexReport):
         doc.preamble.append(NoEscape(r"\def\frameboxbegin#1{"))
         doc.preamble.append(NoEscape(r"    \bigskip"))
         doc.preamble.append(NoEscape(r"    \refstepcounter{frames}"))
-        doc.preamble.append(NoEscape(r"    \begin{tcolorbox}[colback=white,colframe=color1,arc=0mm,title={\MakeUppercase{\textbf{Frame \arabic{frames}}: #1}}]"))
+        doc.preamble.append(
+            NoEscape(
+                r"    \begin{tcolorbox}[colback=white,colframe=color1,arc=0mm,title={\MakeUppercase{\textbf{Frame \arabic{frames}}: #1}}]"
+            )
+        )
         doc.preamble.append(NoEscape(r"}"))
         doc.preamble.append(NoEscape(r"\def\frameboxend{"))
         doc.preamble.append(NoEscape(r"    \end{tcolorbox}"))
@@ -105,7 +151,9 @@ class businessReport(pytexreport.PyTexReport):
 
         # title page
         doc.preamble.append(NoEscape(r"\title{Template for business reports}"))
-        doc.preamble.append(NoEscape(r"\author{Karol Kozioł \newline / Company Name / Company Address}"))
+        doc.preamble.append(
+            NoEscape(r"\author{Karol Kozioł \newline / Company Name / Company Address}")
+        )
         doc.preamble.append(NoEscape(r"\date{\today}"))
 
         doc.preamble.append(NoEscape(r"\newcommand\BackgroundPic{%"))
@@ -113,7 +161,11 @@ class businessReport(pytexreport.PyTexReport):
         doc.preamble.append(NoEscape(r"\parbox[b][\paperheight]{\paperwidth}{%"))
         doc.preamble.append(NoEscape(r"\vfill"))
         doc.preamble.append(NoEscape(r"\centering"))
-        doc.preamble.append(NoEscape(r"\includegraphics[width=\paperwidth,height=\paperheight,keepaspectratio]{cover.png}%"))
+        doc.preamble.append(
+            NoEscape(
+                r"\includegraphics[width=\paperwidth,height=\paperheight,keepaspectratio]{cover.png}%"
+            )
+        )
         doc.preamble.append(NoEscape(r"\vfill"))
         doc.preamble.append(NoEscape(r"}}}"))
         doc.preamble.append(NoEscape(r"\makeatletter"))

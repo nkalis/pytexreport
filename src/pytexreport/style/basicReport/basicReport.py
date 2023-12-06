@@ -1,11 +1,11 @@
 import os
 
+from loguru import logger
 from pylatex import Command, Document, NoEscape
 from pylatex.base_classes import Arguments, Options
 
 from pytexreport import pytexreport
 
-from loguru import logger
 
 class basicReport(pytexreport.PyTexReport):
     def __init__(
@@ -18,7 +18,7 @@ class basicReport(pytexreport.PyTexReport):
         authors: list,
     ):
         # Create the custom docclass and initialize the pytexreport base class
-        doc = Document('basic')
+        doc = Document("basic")
         doc.documentclass = Command(
             "documentclass",
             options=Options("pytexreport"),
@@ -41,10 +41,18 @@ class basicReport(pytexreport.PyTexReport):
         doc.preamble.append(NoEscape(r"\DeclareCaptionType{equ}[][]"))
 
         # Define geometry of pages
-        doc.preamble.append(NoEscape(r"\usepackage[top = 0.8in, bottom = 0.8in, left = 0.6in, right = 0.6in]{geometry}"))
+        doc.preamble.append(
+            NoEscape(
+                r"\usepackage[top = 0.8in, bottom = 0.8in, left = 0.6in, right = 0.6in]{geometry}"
+            )
+        )
 
         # Format the section style
-        doc.preamble.append(NoEscape(r"\titleformat{\section}{\normalfont\Large\bfseries}{\thesection}{1em}{}"))
+        doc.preamble.append(
+            NoEscape(
+                r"\titleformat{\section}{\normalfont\Large\bfseries}{\thesection}{1em}{}"
+            )
+        )
 
         # Load Bibliography
         doc.preamble.append(NoEscape(r"\usepackage[style=numeric]{biblatex}"))
@@ -63,7 +71,11 @@ class basicReport(pytexreport.PyTexReport):
         doc.append(NoEscape(r"\end{figure}"))
         doc.append(NoEscape(r"\textsc{\LARGE Delft University of Technology}"))
         doc.append(NoEscape(r"\medskip"))
-        doc.append(NoEscape(r"\textsc{\Large System Engineering $\&$ Aerospace Design AE3211-I}"))
+        doc.append(
+            NoEscape(
+                r"\textsc{\Large System Engineering $\&$ Aerospace Design AE3211-I}"
+            )
+        )
         doc.append(NoEscape(r"\smallskip"))
         doc.append(NoEscape(r"\HRule"))
         doc.append(NoEscape(r"\vspace{12pt} "))
@@ -71,7 +83,11 @@ class basicReport(pytexreport.PyTexReport):
         doc.append(NoEscape(r"\smallskip"))
         doc.append(NoEscape(r"\HRule"))
         doc.append(NoEscape(r"\normalsize"))
-        doc.append(NoEscape(r"\\ \textsc{In partial fulfillment of the bachelor curriculum of Aerospace Engineering} \bigskip"))
+        doc.append(
+            NoEscape(
+                r"\\ \textsc{In partial fulfillment of the bachelor curriculum of Aerospace Engineering} \bigskip"
+            )
+        )
         doc.append(NoEscape(r"\begin{minipage}{0.4\textwidth}"))
         doc.append(NoEscape(r"\begin{flushleft} \large"))
         doc.append(NoEscape(r"\emph{Authors:}\\"))
@@ -113,4 +129,3 @@ class basicReport(pytexreport.PyTexReport):
         # Inherit all the base class functionality
         self.doc = doc
         super().__init__()
-

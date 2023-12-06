@@ -20,7 +20,7 @@ report = basicHomework(
     subtitle="Output of the test documentation of PyTexReport",
     author="nkalis",
     author_id="00000000",
-    logo="logo.png"
+    logo="logo.png",
 )
 
 # Content available for the base class
@@ -104,9 +104,13 @@ report.createSubSection("Inputting (and automatically generating) functions")
 
 report.createSubSection("Here are some generated functions", numbering=False)
 
+
 def solve(a, b, c):
     return (-b + math.sqrt(b**2 - 4 * a * c)) / (2 * a)
+
+
 report.addEquation(solve, caption="Generated Function", label="function1")
+
 
 def solve(x):
     if x == 0:
@@ -115,6 +119,8 @@ def solve(x):
         return 1
     else:
         return fib(x - 1) + fib(x - 2)
+
+
 report.addEquation(solve, caption="Generated Function (if and or)", label="function2")
 
 report.createSubSection("Here is a handmade function", numbering=False)

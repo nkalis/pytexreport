@@ -18,6 +18,7 @@ from collections import deque
 import latexify
 import matplotlib
 from loguru import logger
+from pandas import DataFrame
 from pylatex import (
     Command,
     Figure,
@@ -32,7 +33,6 @@ from pylatex import (
     Subsubsection,
     Table,
 )
-from pandas import DataFrame
 from pylatex.base_classes import Arguments, Options
 from pylatex.lists import Description, Enumerate, Itemize
 from pylatex.table import Tabular
@@ -53,12 +53,10 @@ class PyTexReport:
         """
 
         # Default colours
-        self.doc.add_color('TODOblue', 'HTML', '0099ff')
-        self.doc.add_color('TODOgreen', 'HTML', '00cc00')
-        self.doc.add_color('TODOorange', 'HTML', 'ffcc00')
-        self.doc.add_color('TODOred', 'HTML', 'ff0000')
-
-        pass
+        self.doc.add_color("TODOblue", "HTML", "0099ff")
+        self.doc.add_color("TODOgreen", "HTML", "00cc00")
+        self.doc.add_color("TODOorange", "HTML", "ffcc00")
+        self.doc.add_color("TODOred", "HTML", "ff0000")
 
     def flush(self, level=0):
         """
@@ -179,10 +177,16 @@ class PyTexReport:
         tdata = {
             "data": data,
             "nrow": dataframe.shape[0] + 1,  # Add 1 for the header row
-            "ncol": dataframe.shape[1]
+            "ncol": dataframe.shape[1],
         }
         print(tdata)
-        self.addTable(caption=caption, label=label, data=tdata["data"], nrow=tdata["nrow"], ncol=tdata["ncol"])
+        self.addTable(
+            caption=caption,
+            label=label,
+            data=tdata["data"],
+            nrow=tdata["nrow"],
+            ncol=tdata["ncol"],
+        )
 
     def addTable(self, caption=None, label=None, data=None, nrow=None, ncol=None):
         table = Table(position="H")

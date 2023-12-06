@@ -21,7 +21,7 @@ report = basicReport(
     department="PyTexReport",
     organization="Test Organization",
     authors=["nkalis"],
-    logo="logo.png"
+    logo="logo.png",
 )
 
 report.createSection("Basic Text Examples")
@@ -106,7 +106,7 @@ report.addText("You can also just add in a Pandas DataFrame as a table!")
 data = {
     "Table Header 1": ["Orange"],
     "Table Header 2": ["Bannana"],
-    "Table Header 3": ["Small"]
+    "Table Header 3": ["Small"],
 }
 df = pd.DataFrame(data)
 report.addDataFrame(
