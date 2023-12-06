@@ -22,7 +22,10 @@ report = businessReport(
 )
 
 report.createSection("Basic Text Examples")
-# report.addText('Text goes here.')
+report.addText('Text goes here.')
+
+report.createSubSection("Unique Boxes")
+report.addFullBox(report.addText, text='Text goes here.')
 
 report.createSubSection("No Line Breaks")
 report.addText("The first line of the paragraph goes here.")

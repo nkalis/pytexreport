@@ -20,6 +20,7 @@ report = basicHomework(
     subtitle="Output of the test documentation of PyTexReport",
     author="nkalis",
     author_id="00000000",
+    logo="logo.png"
 )
 
 # Content available for the base class
@@ -27,24 +28,12 @@ report.createSection("Basic Text Examples")
 
 report.createSubSection("No Line Breaks")
 report.addText("Text goes here.")
-report.addText("Text goes here.")
-report.addText("Text goes here.")
+report.addText("Continuing the text can be done here.")
 
-report.createSubSection("Paragraph Breaks")
+report.createSubSection("Line Breaks")
 report.addText("Text goes here.")
-report.addText("More Text goes here", new_paragraph=True)
+report.addText("A new paragraph can go here", new_paragraph=True)
 
-report.createSubSection("Special text")
-report.createSubSubSection("Referencing")
-report.addText("#TODO: Add referencing")
-report.createSubSubSection("Citing")
-report.addText("#TODO: Add citations")
-report.createSubSubSection("Special Text")
-report.addText("You can add comments so you dont forget to ad")
-report.addText("#TODO : Add TODOs", linebreak=True)
-report.addText("#! : Add warnings", linebreak=True)
-report.addText("#* : Add information", linebreak=True)
-report.addText("#? : Add highlighted questions", linebreak=True)
 
 report.createSection("Lists and Tables")
 # report.addText('Text goes here.')
@@ -104,9 +93,6 @@ report.createSubSection("Matplotlib.pyplot plots")
 x = [0, 1, 2, 3, 4, 5, 6]
 y = [15, 2, 7, 1, 5, 6, 9]
 plt.plot(x, y)
-plt.xlabel("Frequency [Hz]")
-plt.ylabel("Amplitude [g]")
-plt.title("Test Plot Title")
 report.addMatplot(plt, caption="Test Plot 1", label="testplot1")
 
 report.createSubSection("Figures")
@@ -118,13 +104,9 @@ report.createSubSection("Inputting (and automatically generating) functions")
 
 report.createSubSection("Here are some generated functions", numbering=False)
 
-
 def solve(a, b, c):
     return (-b + math.sqrt(b**2 - 4 * a * c)) / (2 * a)
-
-
 report.addEquation(solve, caption="Generated Function", label="function1")
-
 
 def solve(x):
     if x == 0:
@@ -133,8 +115,6 @@ def solve(x):
         return 1
     else:
         return fib(x - 1) + fib(x - 2)
-
-
 report.addEquation(solve, caption="Generated Function (if and or)", label="function2")
 
 report.createSubSection("Here is a handmade function", numbering=False)

@@ -11,6 +11,7 @@ containing data. It also creates a complex header with an image.
 # begin-doc-include
 import matplotlib.pyplot as plt
 import numpy as np
+import pandas as pd
 
 from pytexreport.style.basicReport import basicReport
 
@@ -20,6 +21,7 @@ report = basicReport(
     department="PyTexReport",
     organization="Test Organization",
     authors=["nkalis"],
+    logo="logo.png"
 )
 
 report.createSection("Basic Text Examples")
@@ -41,11 +43,11 @@ report.addText("#TODO: Add referencing")
 report.createSubSubSection("Citing")
 report.addText("#TODO: Add citations")
 report.createSubSubSection("Special Text")
-report.addText("You can add comments so you dont forget to ad")
-report.addText("#TODO : Add TODOs")
-report.addText("#! : Add warnings")
-report.addText("#* : Add information")
-report.addText("#? : Add highlighted questions")
+report.addText("You can add comments so you dont forget to add")
+report.addText("#TODO : Add TODOs", new_paragraph=True)
+report.addText("#! : Add warnings", new_paragraph=True)
+report.addText("#* : Add information", new_paragraph=True)
+report.addText("#? : Add highlighted questions", new_paragraph=True)
 
 report.createSection("Lists and Tables")
 # report.addText('Text goes here.')
@@ -97,6 +99,19 @@ report.addTable(
     nrow=tdata["nrow"],
     ncol=tdata["ncol"],
     caption="Test Table 1 Caption",
+    label="testtable1",
+)
+
+report.addText("You can also just add in a Pandas DataFrame as a table!")
+data = {
+    "Table Header 1": ["Orange"],
+    "Table Header 2": ["Bannana"],
+    "Table Header 3": ["Small"]
+}
+df = pd.DataFrame(data)
+report.addDataFrame(
+    dataframe=df,
+    caption="Test DataFrame 1 Caption",
     label="testtable1",
 )
 

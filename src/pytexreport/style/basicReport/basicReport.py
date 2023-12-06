@@ -1,165 +1,116 @@
-from datetime import date
+import os
 
-from pylatex import Command, Document, Figure, MiniPage, NoEscape
+from pylatex import Command, Document, NoEscape
 from pylatex.base_classes import Arguments, Options
 
 from pytexreport import pytexreport
 
+from loguru import logger
 
 class basicReport(pytexreport.PyTexReport):
     def __init__(
         self,
         title: str,
         subtitle: str,
+        logo: str,
         department: str,
         organization: str,
         authors: list,
     ):
+        # Create the custom docclass and initialize the pytexreport base class
+        doc = Document('basic')
+        doc.documentclass = Command(
+            "documentclass",
+            options=Options("pytexreport"),
+            arguments=[NoEscape(r"pytexreport")],
+        )
+        self.classFile = os.path.normpath(
+            rf"{os.path.abspath(os.path.join(os.path.dirname( __file__ ), '..', 'class/pytexreport.cls'))}"
+        )
+        self.classFileName = "pytexreport"
+
+        # Set up the custom document title page parameters
         self.title = title
         self.subtitle = subtitle
+        self.logo = logo
         self.department = department
         self.organization = organization
         self.authors = authors
 
-        docclass = Command(
-            "documentclass",
-            options=Options(
-                "10pt",
-                "a4paper",
-            ),
-            arguments=Arguments("article"),
-        )
+        # Allow captioning of equations
+        doc.preamble.append(NoEscape(r"\DeclareCaptionType{equ}[][]"))
 
-        geometry_options = {"margin": "0.7in"}
+        # Define geometry of pages
+        doc.preamble.append(NoEscape(r"\usepackage[top = 0.8in, bottom = 0.8in, left = 0.6in, right = 0.6in]{geometry}"))
 
-        # Start LaTex Doc
-        doc = Document(documentclass=docclass, geometry_options=geometry_options)
+        # Format the section style
+        doc.preamble.append(NoEscape(r"\titleformat{\section}{\normalfont\Large\bfseries}{\thesection}{1em}{}"))
+        
+        # Load Bibliography
+        doc.preamble.append(NoEscape(r"\usepackage[style=numeric]{biblatex}"))
+        doc.preamble.append(NoEscape(r"\addbibresource{References.bib}"))
 
-        # Load Packages
-        doc.packages.append(
-            Command(
-                "usepackage",
-                arguments=Arguments("xcolor"),
-                options=Options("table", "xcdraw", "dvipsnames"),
-            )
-        )
-        doc.packages.append(Command("usepackage", arguments=Arguments("hyperref")))
-        doc.packages.append(Command("usepackage", arguments=Arguments("amsfonts")))
-        doc.packages.append(
-            Command(
-                "usepackage", arguments=Arguments("caption"), options=("labelfont=bf")
-            )
-        )
-        doc.packages.append(Command("usepackage", arguments=Arguments("graphicx")))
-        doc.packages.append(Command("usepackage", arguments=Arguments("fancyhdr")))
-        doc.packages.append(Command("usepackage", arguments=Arguments("lastpage")))
-        doc.packages.append(
-            Command(
-                "usepackage",
-                arguments=Arguments("biblatex"),
-                options=Options("style=apa"),
-            )
-        )
-        doc.packages.append(Command("usepackage", arguments=Arguments("tocbibind")))
-        doc.packages.append(Command("usepackage", arguments=Arguments("csquotes")))
-        doc.packages.append(Command("usepackage", arguments=Arguments("comment")))
-        doc.packages.append(Command("usepackage", arguments=Arguments("array")))
-        doc.packages.append(
-            Command(
-                "usepackage",
-                arguments=Arguments("adjustbox"),
-                options=Options("export"),
-            )
-        )
-        doc.packages.append(
-            Command(
-                "usepackage",
-                arguments=Arguments("appendix"),
-                options=Options("toc", "page"),
-            )
-        )
-        doc.packages.append(
-            Command(
-                "usepackage", arguments=Arguments("tocloft"), options=Options("titles")
-            )
-        )
-        doc.packages.append(Command("usepackage", arguments=Arguments("subfig")))
-        doc.packages.append(Command("usepackage", arguments=Arguments("chngcntr")))
-        doc.packages.append(Command("usepackage", arguments=Arguments("amsmath")))
-        doc.packages.append(Command("usepackage", arguments=Arguments("tabularx")))
-        doc.packages.append(Command("usepackage", arguments=Arguments("multirow")))
-        doc.packages.append(Command("usepackage", arguments=Arguments("pdfpages")))
-        doc.packages.append(Command("usepackage", arguments=Arguments("rotating")))
-        doc.packages.append(Command("usepackage", arguments=Arguments("tikz")))
-        doc.packages.append(Command("usepackage", arguments=Arguments("longtable")))
-        doc.packages.append(Command("usepackage", arguments=Arguments("rotating")))
-        doc.packages.append(
-            Command("numberwithin", arguments=Arguments("equation", "section"))
-        )
-
-        # Some Preamble
-        doc.append(NoEscape(r"\pagestyle{fancy}"))
-        doc.preamble.append(
-            NoEscape(r"\newcolumntype{P}[1]{>{\centering\arraybackslash}p{#1}}")
-        )
-
-        doc.packages.append(NoEscape(r"\usepackage{titlesec}"))
-        doc.preamble.append(NoEscape(r"\titleformat{\section}"))
-        doc.preamble.append(
-            NoEscape(r"{\normalfont\Large\bfseries}{\thesection}{1em}{}")
-        )
-
-        doc.preamble.append(NoEscape(r"\setlength\parindent{0pt}"))
-        doc.preamble.append(
-            NoEscape(r"\setitemize{noitemsep,topsep=0pt,parsep=0pt,partopsep=5pt}")
-        )
-
-        doc.preamble.append(NoEscape(r"\addbibresource{sample.bib}"))
-
-        # Counting figures and tables from section number
-        doc.preamble.append(NoEscape(r"\counterwithin{figure}{section}"))
-        doc.preamble.append(NoEscape(r"\counterwithin{table}{section}"))
-
-        # Create Title Page
-        doc.append(Command("begin", arguments=Arguments("titlepage")))
+        # Add title page
+        doc.append(NoEscape(r"\thispagestyle{empty}"))
+        doc.append(NoEscape(r"\begin{center}"))
         doc.append(NoEscape(r"\newcommand{\HRule}{\rule{\linewidth}{0.5mm}}"))
-        doc.append(NoEscape(r"\center"))
-        with doc.create(Figure(position="H")) as logo_icon:
-            logo_icon.add_image(
-                "logo.png", width="120px", placement=NoEscape(r"\centering")
-            )
+        doc.append(NoEscape(r"\def\smallskip{\vspace{6pt}\\}"))
+        doc.append(NoEscape(r"\def\medskip{\vspace{24pt}\\}"))
+        doc.append(NoEscape(r"\def\bigskip{\vspace{48pt}\\}"))
+        doc.append(NoEscape(r"\begin{figure} [h]"))
+        doc.append(NoEscape(r"    \centering"))
+        doc.append(NoEscape(r"    \includegraphics [scale=0.50]{" + self.logo + "} "))
+        doc.append(NoEscape(r"\end{figure}"))
+        doc.append(NoEscape(r"\textsc{\LARGE Delft University of Technology}"))
+        doc.append(NoEscape(r"\medskip"))
+        doc.append(NoEscape(r"\textsc{\Large System Engineering $\&$ Aerospace Design AE3211-I}"))
+        doc.append(NoEscape(r"\smallskip"))
+        doc.append(NoEscape(r"\HRule"))
+        doc.append(NoEscape(r"\vspace{12pt} "))
+        doc.append(NoEscape(r"{ \huge \bfseries Aircraft Tutorial - Group: 22 }"))
+        doc.append(NoEscape(r"\smallskip"))
+        doc.append(NoEscape(r"\HRule"))
+        doc.append(NoEscape(r"\normalsize"))
+        doc.append(NoEscape(r"\\ \textsc{In partial fulfillment of the bachelor curriculum of Aerospace Engineering} \bigskip"))
+        doc.append(NoEscape(r"\begin{minipage}{0.4\textwidth}"))
+        doc.append(NoEscape(r"\begin{flushleft} \large"))
+        doc.append(NoEscape(r"\emph{Authors:}\\"))
+        doc.append(NoEscape(r"    Emilie Bessette (4534921)\\"))
+        doc.append(NoEscape(r"    Nicolas Kalis (4537130)\\"))
+        doc.append(NoEscape(r"\end{flushleft}"))
+        doc.append(NoEscape(r"\end{minipage}"))
+        doc.append(NoEscape(r"\vspace{\fill}"))
+        doc.append(NoEscape(r"\begin{center}"))
+        doc.append(NoEscape(r"\begin{minipage}[b]{0.5\textwidth}"))
+        doc.append(NoEscape(r"    \vspace{\fill}"))
+        doc.append(NoEscape(r"    \begin{center}"))
+        doc.append(NoEscape(r"        {\large 10 December 2012}"))
+        doc.append(NoEscape(r"    \end{center} "))
+        doc.append(NoEscape(r"\end{minipage}%"))
+        doc.append(NoEscape(r"\end{center} "))
+        doc.append(NoEscape(r"\end{center} "))
+        doc.append(NoEscape(r"\newpage"))
 
-        doc.append(NoEscape(r"\textsc{\Large " + self.organization + r" }\\[1.5cm]"))
-        doc.append(NoEscape(r"\textsc{\Large " + self.department + r" }\\[0.5cm]"))
-        doc.append(NoEscape(r"\HRule \\[0.4cm]"))
-        doc.append(NoEscape(r"{ \huge \bfseries " + self.title + r" }\\[0.4cm]"))
-        doc.append(NoEscape(r"\HRule \\"))
-        doc.append(NoEscape(r"\normalsize \textsc{" + self.subtitle + r"} \\[3cm]"))
-        # doc.append(Section('Introduction', numbering=None, label='00'))
+        # Headers and footers
+        doc.append(NoEscape(r"\pagestyle{fancy}"))
+        doc.append(NoEscape(r"\fancyhead[R]{\slshape \rightmark}"))
+        doc.append(NoEscape(r"\fancyhead[L]{ \textbf{AE3211-I -- Aircraft Tutorial}}"))
+        doc.append(NoEscape(r"\fancyfoot[R]{ \fbox{\textbf{DRAFT}}}"))
+        doc.append(NoEscape(r"\setlength{\headheight}{14pt}"))
 
-        with doc.create(MiniPage(width=r"0.4\textwidth")):
-            doc.append(NoEscape(r"\begin{flushleft} \large"))
+        # Table of contents
+        doc.append(NoEscape(r"\section*{Table of Contents}"))
+        doc.append(NoEscape(r"\pagenumbering{gobble}"))
+        doc.append(NoEscape(r"\makeatletter"))
+        doc.append(NoEscape(r"\@starttoc{toc}"))
+        doc.append(NoEscape(r"\makeatother"))
+        doc.append(NoEscape(r"\newpage"))
 
-            doc.append(Command("emph", arguments=Arguments("Author(s):")))
-            for author in authors:
-                doc.append("\n")
-                doc.append(str(author))
-            doc.append(NoEscape(r"\end{flushleft}"))
+        # Roman or Arabic numbering
+        doc.append(NoEscape(r"\pagenumbering{roman}"))
+        doc.append(NoEscape(r"\pagenumbering{arabic}"))
 
-        doc.append(NoEscape(r"\mbox{}"))
-        doc.append(NoEscape(r"\vfill"))
-        doc.append(NoEscape(rf"\large {date.today()}"))
-        doc.append(Command("end", arguments=Arguments("titlepage")))
-
-        # Fancy footers for other pages
-        doc.append(NoEscape(r"\fancyhf{}"))
-        doc.append(NoEscape(r"\fancyhead[R]{Page \thepage}"))
-        doc.append(NoEscape(r"\fancyhead[L]{\slshape \rightmark}"))
-        doc.append(NoEscape(r"\fancyfoot[R]{ \textbf{" + self.title + r"}}"))
-        if len(authors) == 1:
-            doc.append(NoEscape(r"\fancyfoot[L]{" + self.authors[0] + r"}"))
-        else:
-            doc.append(NoEscape(r"\fancyfoot[L]{" + self.department + r"}"))
-
+        # Inherit all the base class functionality
         self.doc = doc
         super().__init__()
+

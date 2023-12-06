@@ -32,6 +32,7 @@ from pylatex import (
     Subsubsection,
     Table,
 )
+from pandas import DataFrame
 from pylatex.base_classes import Arguments, Options
 from pylatex.lists import Description, Enumerate, Itemize
 from pylatex.table import Tabular
@@ -47,43 +48,28 @@ class PyTexReport:
     content = []
 
     def __init__(self):
-        # Adding Package to allow notes
-        self.doc.preamble.append(NoEscape(r"\usepackage{amsmath, xparse}"))
-        self.doc.packages.append(
-            Command(
-                "usepackage",
-                arguments=Arguments("xcolor"),
-                options=Options(
-                    "usenames", "svgnames", "table", "xcdraw", "dvipsnames"
-                ),
-            )
-        )
-        # Captioning Equations
-        self.doc.packages.append(Command("usepackage", arguments=Arguments("float")))
-        self.doc.preamble.append(NoEscape(r"\usepackage{aliascnt}"))
-        self.doc.preamble.append(NoEscape(r"\newaliascnt{eqfloat}{equation}"))
-        self.doc.preamble.append(NoEscape(r"\newfloat{eqfloat}{h}{eqflts}"))
-        self.doc.preamble.append(NoEscape(r"\floatname{eqfloat}{Equation}"))
+        """
+        Initializes a new instance of the class.
+        """
 
-        self.doc.preamble.append(NoEscape(r"\newcommand*{\ORGeqfloat}{}"))
-        self.doc.preamble.append(NoEscape(r"\let\ORGeqfloat\eqfloat"))
-        self.doc.preamble.append(NoEscape(r"\def\eqfloat{%"))
-        self.doc.preamble.append(NoEscape(r"    \let\ORIGINALcaption\caption"))
-        self.doc.preamble.append(NoEscape(r"    \def\caption{%"))
-        self.doc.preamble.append(NoEscape(r"        \addtocounter{equation}{-1}%"))
-        self.doc.preamble.append(NoEscape(r"        \ORIGINALcaption"))
-        self.doc.preamble.append(NoEscape(r"    }%"))
-        self.doc.preamble.append(NoEscape(r"    \ORGeqfloat"))
-        self.doc.preamble.append(NoEscape(r"}"))
+        # Default colours
+        self.doc.add_color('TODOblue', 'HTML', '0099ff')
+        self.doc.add_color('TODOgreen', 'HTML', '00cc00')
+        self.doc.add_color('TODOorange', 'HTML', 'ffcc00')
+        self.doc.add_color('TODOred', 'HTML', 'ff0000')
 
-        # Enum Items
-        self.doc.packages.append(
-            Command("usepackage", arguments=Arguments("enumitem")),
-        )
+        pass
 
     def flush(self, level=0):
-        logger.info(self.presentSection)
-        logger.info(self.content)
+        """
+        Flushes the content of the object based on the given level.
+        Args:
+            level (int, optional): The level at which to flush the content. Defaults to 0.
+        Returns:
+            None
+        """
+
+        print(self.content)
 
         if len(self.content) < 1:
             return
@@ -109,13 +95,21 @@ class PyTexReport:
             else:
                 self.presentSection[level - 1].append(last)
 
-        logger.info(self.content)
-
     def createNewPage(self):
+        """
+        Creates a new page.
+        This function appends a new page to the `content` list.
+        
+        Parameters:
+            self (ClassName): The instance of the class.
+        
+        Returns:
+            None
+        """
         self.content.append(NewPage())
 
     def createNewLine(self):
-        self.content.append(NewLine())
+        self.content.append(r"\par")
 
     def addLineBreak(self):
         self.content.append(LineBreak())
@@ -143,23 +137,20 @@ class PyTexReport:
         self.subsubsection = Subsubsection(title, numbering=numbering)
         self.presentSection.append(self.subsubsection)
 
-    def addText(self, text, color=None, new_paragraph=False, linebreak=False):
-        if new_paragraph:
-            self.content.append(NoEscape(r"\\ "))
-            self.content.append(NoEscape(r"\\ "))
-        elif linebreak:
-            self.createNewLine()
-
+    def addText(self, text, color=None, new_paragraph=False):
         if text[0] == "#":
             text = text[1:]
             if text[0] == "!":
-                text = NoEscape(r"\textcolor{Bittersweet}{" + rf"{text}" + r"}")
+                text = NoEscape(r"{\color{TODOred}{" + rf"{text}" + r"}}")
             if text[0] == "*":
-                text = NoEscape(r"\textcolor{LimeGreen}{" + rf"{text}" + r"}")
+                text = NoEscape(r"{\color{TODOgreen}{" + rf"{text}" + r"}}")
             if text[0] == "?":
-                text = NoEscape(r"\textcolor{Cyan}{" + rf"{text}" + r"}")
+                text = NoEscape(r"{\color{TODOblue}{" + rf"{text}" + r"}}")
             if text[0:4] == "TODO":
-                text = NoEscape(r"\textcolor{YellowOrange}{" + rf"{text}" + r"}")
+                text = NoEscape(r"{\color{TODOorange}{" + rf"{text}" + r"}}")
+            
+        if new_paragraph:
+            text = r"\medskip \par " + text
 
         if color is not None:
             text = NoEscape(r"\textcolor{" + color + "}{" + text + "}")
@@ -181,6 +172,17 @@ class PyTexReport:
                 items.add_item(item[0], item[1])
 
         self.content.append(items)
+    
+    def addDataFrame(self, dataframe=DataFrame, caption=None, label=None):
+        data = dataframe.to_numpy().tolist()
+        data.insert(0, list(dataframe.columns))
+        tdata = {
+            "data": data,
+            "nrow": dataframe.shape[0] + 1,  # Add 1 for the header row
+            "ncol": dataframe.shape[1]
+        }
+        print(tdata)
+        self.addTable(caption=caption, label=label, data=tdata["data"], nrow=tdata["nrow"], ncol=tdata["ncol"])
 
     def addTable(self, caption=None, label=None, data=None, nrow=None, ncol=None):
         table = Table(position="H")
@@ -252,7 +254,7 @@ class PyTexReport:
             equation = latexify.get_latex(equation)
 
         if not inline:
-            self.content.append(NoEscape(r"\begin{eqfloat}[H]"))
+            self.content.append(NoEscape(r"\begin{equ}[!ht]"))
             self.content.append(NoEscape(r"\begin{equation}"))
             self.content.append(NoEscape(equation))
             self.content.append(NoEscape(r"\end{equation}"))
@@ -260,8 +262,7 @@ class PyTexReport:
                 self.content.append(NoEscape(r"\caption{" + caption + r"}"))
             if label is not None:
                 self.content.append(NoEscape(r"\label{eq:" + label + r"}"))
-
-            self.content.append(NoEscape(r"\end{eqfloat}"))
+            self.content.append(NoEscape(r"\end{equ}"))
 
         else:
             self.content.append(NoEscape(rf"${equation}$"))
@@ -290,7 +291,7 @@ class PyTexReport:
             outputpath = self.classFileName + ".cls"
             shutil.copyfile(inputpath, outputpath)
 
-        self.doc.generate_pdf(self.filename, clean_tex=True, silent=True)
+        self.doc.generate_pdf(self.filename, clean=True, clean_tex=False, silent=True)
 
     def _flush(self):
         if len(self.presentSection) > 2:
