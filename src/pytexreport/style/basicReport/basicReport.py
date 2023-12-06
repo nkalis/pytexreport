@@ -45,7 +45,7 @@ class basicReport(pytexreport.PyTexReport):
 
         # Format the section style
         doc.preamble.append(NoEscape(r"\titleformat{\section}{\normalfont\Large\bfseries}{\thesection}{1em}{}"))
-        
+
         # Load Bibliography
         doc.preamble.append(NoEscape(r"\usepackage[style=numeric]{biblatex}"))
         doc.preamble.append(NoEscape(r"\addbibresource{References.bib}"))

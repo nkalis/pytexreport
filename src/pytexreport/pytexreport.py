@@ -99,10 +99,10 @@ class PyTexReport:
         """
         Creates a new page.
         This function appends a new page to the `content` list.
-        
+
         Parameters:
             self (ClassName): The instance of the class.
-        
+
         Returns:
             None
         """
@@ -148,7 +148,7 @@ class PyTexReport:
                 text = NoEscape(r"{\color{TODOblue}{" + rf"{text}" + r"}}")
             if text[0:4] == "TODO":
                 text = NoEscape(r"{\color{TODOorange}{" + rf"{text}" + r"}}")
-            
+
         if new_paragraph:
             text = r"\medskip \par " + text
 
@@ -172,7 +172,7 @@ class PyTexReport:
                 items.add_item(item[0], item[1])
 
         self.content.append(items)
-    
+
     def addDataFrame(self, dataframe=DataFrame, caption=None, label=None):
         data = dataframe.to_numpy().tolist()
         data.insert(0, list(dataframe.columns))

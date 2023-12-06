@@ -6,9 +6,9 @@
 
 % Load packages (no clashes hopefully)
 % SEAD
-\usepackage{amsfonts} 
+\usepackage{amsfonts}
 \usepackage{graphicx}
-\usepackage{dblfloatfix} 
+\usepackage{dblfloatfix}
 \usepackage{fancyhdr}
 \usepackage{lastpage}
 \usepackage{float}

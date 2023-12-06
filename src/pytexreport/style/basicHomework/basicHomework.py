@@ -73,7 +73,7 @@ class basicHomework(pytexreport.PyTexReport):
         doc.preamble.append(NoEscape(r" \bigskip"))
         doc.preamble.append(NoEscape(r" \bigskip"))
         doc.preamble.append(NoEscape(r"}"))
-        
+
 
         # Set up footers/headers
         doc.preamble.append(NoEscape(r"\pagestyle{fancy}"))
