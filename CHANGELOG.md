@@ -5,17 +5,20 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 
 ## [Unreleased]
+
+## [0.1.0] - 2023-05-22
 ### Added
-    - Added examples for the three styles implemented
+- - Added examples for the three styles implemented
 
 ### Fixed
-    - Project setup files and variables
+- - Project setup files and variables
     - Importing styles and locations of files
 
 ## [0.0.2] - 2023-05-21
 ### Added
 - - Basic project structure setup
 
-[Unreleased]: https://github.com/nkalis/pytexreport/compare/0.0.2...master
+[Unreleased]: https://github.com/nkalis/pytexreport/compare/0.1.0...master
+[0.1.0]: https://github.com/nkalis/pytexreport/compare/0.0.2...0.1.0
 [0.0.2]: https://github.com/nkalis/pytexreport/tree/0.0.2
 
