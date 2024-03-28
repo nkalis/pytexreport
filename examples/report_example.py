@@ -11,7 +11,6 @@ containing data. It also creates a complex header with an image.
 # begin-doc-include
 import matplotlib.pyplot as plt
 import numpy as np
-
 from PyTexReport.style import basicReport
 
 report = basicReport(
